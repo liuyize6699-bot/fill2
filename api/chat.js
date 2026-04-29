@@ -1,6 +1,6 @@
 const COZE_API_BASE = "https://api.coze.cn";
-const MAX_POLLS = 24;
-const POLL_INTERVAL_MS = 800;
+const MAX_POLLS = 40;
+const POLL_INTERVAL_MS = 1500;
 
 const siteContext = `
 刘海个人网站资料：
