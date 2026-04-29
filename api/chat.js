@@ -1,4 +1,4 @@
-export const config = { runtime: "edge" };
+export const config = { runtime: "nodejs" };
 
 const COZE_API_BASE = "https://api.coze.cn";
 const MAX_POLLS = 24;
