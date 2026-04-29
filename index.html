@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="刘海，无人机系统集成与 AI 应用工程师。CAAC 无人机机长执照，MAVLink/PX4/MAVSDK/FastAPI/Agent 工作流经验。" />
+  <title>刘海 | 无人机系统集成与 AI 应用工程师</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --ink: #111827;
+      --muted: #5f6877;
+      --subtle: #8b95a7;
+      --line: #dfe3ea;
+      --line-strong: #c8ced8;
+      --blue: #1769ff;
+      --green: #0d8b61;
+      --amber: #a26100;
+      --red: #b42318;
+      --radius: 8px;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+      --max: 1160px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.6;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(17, 24, 39, 0.55);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      height: 64px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      color: #ffffff;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 7px;
+      font-size: 13px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .nav-links a {
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    .nav-cta {
+      min-height: 36px;
+      padding: 7px 14px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 86svh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      color: #ffffff;
+      background: #111827;
+    }
+
+    .hero-media,
+    .hero-media video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-media video {
+      object-fit: cover;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(5, 10, 20, 0.82) 0%, rgba(5, 10, 20, 0.58) 46%, rgba(5, 10, 20, 0.22) 100%),
+        linear-gradient(0deg, rgba(5, 10, 20, 0.86) 0%, rgba(5, 10, 20, 0.1) 52%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 132px 24px 56px;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 44px;
+      align-items: end;
+    }
+
+    .hero-copy {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #37d399;
+      box-shadow: 0 0 0 6px rgba(55, 211, 153, 0.18);
+    }
+
+    .hero h1 {
+      max-width: 1040px;
+      margin: 0;
+      font-size: clamp(44px, 8vw, 88px);
+      line-height: 0.98;
+      font-weight: 760;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .hero h1 span {
+      display: block;
+    }
+
+    .hero-lead {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-actions {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .profile-card {
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-photo {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      display: block;
+      object-fit: cover;
+      object-position: 50% 36%;
+      border-radius: 6px;
+      background: #ffffff;
+    }
+
+    .profile-meta {
+      padding: 13px 4px 2px;
+    }
+
+    .profile-meta strong {
+      display: block;
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+
+    .profile-meta span {
+      display: block;
+      margin-top: 5px;
+      color: rgba(255, 255, 255, 0.66);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 10px 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    button.btn {
+      appearance: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .hero-facts {
+      margin-top: 42px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      border-radius: var(--radius);
+    }
+
+    .fact {
+      min-height: 112px;
+      padding: 18px;
+      border-right: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .fact:last-child {
+      border-right: 0;
+    }
+
+    .fact strong {
+      display: block;
+      color: #ffffff;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .fact span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section {
+      padding: 86px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section.alt {
+      background: var(--surface);
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+      gap: 48px;
+      margin-bottom: 36px;
+      align-items: start;
+    }
+
+    .section-kicker {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .section-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      min-height: 28px;
+      padding: 4px 9px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fbfcfd;
+      color: #394150;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tag.blue {
+      color: #114db7;
+      border-color: #cddcff;
+      background: #f2f6ff;
+    }
+
+    .tag.green {
+      color: var(--green);
+      border-color: #bee7d4;
+      background: #f0fbf6;
+    }
+
+    .tag.amber {
+      color: var(--amber);
+      border-color: #f0d49a;
+      background: #fff8e7;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .project-main {
+      padding: 30px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+    }
+
+    .project-main h3 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.2;
+    }
+
+    .project-main > p {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .flow {
+      margin-top: 26px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .flow-index {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #f8fafc;
+      color: var(--subtle);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .flow-copy {
+      min-height: 34px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #273142;
+      background: #ffffff;
+      font-size: 14px;
+    }
+
+    .project-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .status-card {
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: #101828;
+      color: #ffffff;
+      border-radius: var(--radius);
+    }
+
+    .status-card h3 {
+      margin: 0 0 16px;
+      font-size: 17px;
+    }
+
+    .status-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .status-list li {
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 14px;
+    }
+
+    .status-list strong {
+      color: #ffffff;
+    }
+
+    .video-card {
+      min-height: 280px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #000000;
+      border-radius: var(--radius);
+    }
+
+    .video-card video {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+      display: block;
+      object-fit: cover;
+    }
+
+    .role-table {
+      display: grid;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .role-row {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .role-row:last-child {
+      border-bottom: 0;
+    }
+
+    .role-label {
+      padding: 18px 20px;
+      background: #f8fafc;
+      color: #273142;
+      font-weight: 800;
+      border-right: 1px solid var(--line);
+    }
+
+    .role-copy {
+      padding: 18px 20px;
+      color: var(--muted);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 22px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+    }
+
+    .timeline-time {
+      color: var(--subtle);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .timeline-body h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .timeline-body p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+      gap: 18px;
+    }
+
+    .contact-card {
+      padding: 28px;
+      border: 1px solid var(--line);
+      background: #101828;
+      color: #ffffff;
+      border-radius: var(--radius);
+    }
+
+    .contact-card h2 {
+      font-size: clamp(28px, 4vw, 40px);
+    }
+
+    .contact-card p {
+      color: rgba(255, 255, 255, 0.72);
+      margin: 14px 0 0;
+    }
+
+    .contact-links {
+      margin-top: 26px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .contact-link {
+      min-height: 46px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+      overflow-wrap: anywhere;
+    }
+
+    button.contact-link {
+      width: 100%;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .contact-link span {
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .assistant-card {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .assistant-head {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .assistant-head h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .assistant-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .assistant-state::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .chat-log {
+      height: 320px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: auto;
+      background: #f8fafc;
+    }
+
+    .msg {
+      max-width: 86%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: #273142;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: #1769ff;
+      color: #ffffff;
+      border-color: #1769ff;
+    }
+
+    .chat-form {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .chat-form input {
+      min-width: 0;
+      min-height: 42px;
+      padding: 9px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      outline: none;
+    }
+
+    .chat-form input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(23, 105, 255, 0.12);
+    }
+
+    .chat-form button {
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 6px;
+      background: #101828;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .footer {
+      padding: 30px 24px;
+      background: #0b1220;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 13px;
+    }
+
+    .wechat-modal[hidden] {
+      display: none;
+    }
+
+    .wechat-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.62);
+      backdrop-filter: blur(12px);
+    }
+
+    .wechat-dialog {
+      width: min(360px, 100%);
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+
+    .wechat-dialog-head {
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .wechat-dialog-head h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .wechat-close {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .wechat-dialog-body {
+      padding: 24px;
+      text-align: center;
+    }
+
+    .wechat-qr {
+      width: min(260px, 100%);
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .wechat-note {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-facts,
+      .hero-layout,
+      .grid-4,
+      .grid-3,
+      .project,
+      .section-head,
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .fact {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .fact:nth-last-child(-n + 2) {
+        border-bottom: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        height: 58px;
+        padding: 0 16px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero {
+        min-height: 88svh;
+      }
+
+      .hero-inner {
+        padding: 104px 16px 36px;
+      }
+
+      .hero-lead {
+        font-size: 16px;
+      }
+
+      .profile-card {
+        max-width: 360px;
+        display: grid;
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 12px;
+        align-items: center;
+      }
+
+      .profile-photo {
+        aspect-ratio: 3 / 4;
+      }
+
+      .profile-meta {
+        padding: 0;
+      }
+
+      .eyebrow {
+        flex-wrap: wrap;
+        font-size: 13px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+        line-height: 1.06;
+        max-width: calc(100vw - 48px);
+        word-break: break-all;
+      }
+
+      .hero-lead {
+        max-width: calc(100vw - 48px);
+        word-break: break-all;
+      }
+
+      .hero-facts {
+        grid-template-columns: 1fr;
+      }
+
+      .fact,
+      .fact:nth-last-child(-n + 2) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .fact:last-child {
+        border-bottom: 0;
+      }
+
+      .section {
+        padding: 62px 16px;
+      }
+
+      .section-head {
+        gap: 14px;
+      }
+
+      .project-main,
+      .contact-card {
+        padding: 22px;
+      }
+
+      .role-row,
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .role-label {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .timeline-time {
+        margin-bottom: 8px;
+      }
+
+      .chat-log {
+        height: 300px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .eyebrow,
+      .hero h1,
+      .hero-lead,
+      .hero-facts {
+        max-width: 342px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="回到首页">
+        <span class="brand-mark">LH</span>
+        <span>刘海</span>
+      </a>
+      <div class="nav-links">
+        <a href="#value">能力</a>
+        <a href="#project">项目</a>
+        <a href="#scenarios">场景</a>
+        <a href="#roles">岗位</a>
+        <a href="#experience">经历</a>
+        <a href="#contact">联系</a>
+      </div>
+      <a class="nav-cta" href="https://github.com/liuyize6699-bot/wurenji-system" target="_blank" rel="noreferrer">GitHub 项目</a>
+    </div>
+  </nav>
+
+  <header id="top" class="hero">
+    <div class="hero-media" aria-hidden="true">
+      <video src="demo.mp4" autoplay muted loop playsinline preload="metadata"></video>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow">CAAC 无人机机长执照 · 无人机系统集成 · AI 应用工程</p>
+          <h1><span>把 AI 调度</span><span>接到无人机</span><span>业务里。</span></h1>
+          <p class="hero-lead">
+            我叫刘海，上一份工作在无人机公司做技术与交付。熟悉大疆无人机外场作业、MAVLink/PX4 仿真链路、MAVSDK 程序化控制与 FastAPI/Agent 工作流，目标岗位是无人机系统集成、地面站测试、QGC 二开辅助和低空经济 AI 应用落地。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#project">查看核心项目</a>
+            <button class="btn btn-ghost js-open-wechat" type="button">联系我</button>
+          </div>
+        </div>
+        <aside class="profile-card" aria-label="刘海个人照片">
+          <img class="profile-photo" src="assets/avatar-liuhai.jpg" alt="刘海个人头像" />
+          <div class="profile-meta">
+            <strong>刘海</strong>
+            <span>无人机系统集成 / AI 应用工程 / CAAC 持证</span>
+          </div>
+        </aside>
+      </div>
+      <div class="hero-facts" aria-label="个人能力摘要">
+        <div class="fact">
+          <strong>CAAC</strong>
+          <span>无人机机长执照，具备外场安全意识与客户现场经验。</span>
+        </div>
+        <div class="fact">
+          <strong>MAVLink</strong>
+          <span>理解飞控通信链路，使用 MAVSDK-Python 控制 PX4 SITL。</span>
+        </div>
+        <div class="fact">
+          <strong>PX4</strong>
+          <span>完成自定义消息与固件模块的初步二次开发验证。</span>
+        </div>
+        <div class="fact">
+          <strong>Agent</strong>
+          <span>Coze/Dify 工作流、Function Calling、Webhook 与后端集成。</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="value" class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">What I Can Do</p>
+            <h2>我现在能帮团队做这些事。</h2>
+          </div>
+          <p class="section-copy">
+            我更擅长把无人机现场、飞控通信、云端服务和 AI 工作流接起来。不是纯底层算法路线，而是能比较快进入项目现场、测试环境和平台集成工作的人。
+          </p>
+        </div>
+        <div class="grid-4">
+          <article class="card">
+            <h3>外场交付与客户培训</h3>
+            <p>大疆工业级无人机作业、现场部署、基础排障、安全检查和客户操作培训。</p>
+            <div class="tag-row">
+              <span class="tag green">CAAC</span>
+              <span class="tag">M300/M210</span>
+              <span class="tag">SOP</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>MAVLink 与仿真测试</h3>
+            <p>用 MAVSDK 控制 PX4，理解解锁、起飞、航点、降落、任务状态等飞控链路。</p>
+            <div class="tag-row">
+              <span class="tag blue">MAVLink v2</span>
+              <span class="tag">PX4 SITL</span>
+              <span class="tag">Gazebo</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>AI 调度流程集成</h3>
+            <p>把自然语言、Function Calling、地图/天气 API、Webhook 和本地控制端连接起来。</p>
+            <div class="tag-row">
+              <span class="tag blue">FastAPI</span>
+              <span class="tag">Coze</span>
+              <span class="tag">asyncio</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>方案表达与产品化</h3>
+            <p>能把技术链路讲给非研发角色听，输出架构图、演示视频、项目文档和交付话术。</p>
+            <div class="tag-row">
+              <span class="tag amber">方案</span>
+              <span class="tag">演示</span>
+              <span class="tag">设计表达</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="project" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Featured System</p>
+            <h2>大模型驱动的无人机集群自动化调度系统。</h2>
+          </div>
+          <p class="section-copy">
+            项目当前处于仿真验证阶段，重点证明从“用户自然语言任务”到“云端调度、本地轮询、飞控执行、双仿真反馈”的完整闭环。它真正想解决的是高频巡检太依赖专业飞手、任务下发和飞后记录不够自动化的问题。
+          </p>
+        </div>
+        <div class="project">
+          <article class="project-main">
+            <h3>从一句飞书消息，到 PX4 与 UE4 双仿真并行执行。</h3>
+            <p>
+              我做这个项目，是想验证 AI 能不能成为无人机调度的上层入口：先理解任务、检查条件、生成指令，再把执行交给稳定的飞控链路。它目前是仿真 MVP，不是已经商用的成品系统。
+            </p>
+            <div class="flow" aria-label="系统数据流">
+              <div class="flow-step">
+                <span class="flow-index">01</span>
+                <span class="flow-copy">飞书移动端发送自然语言巡检任务</span>
+              </div>
+              <div class="flow-step">
+                <span class="flow-index">02</span>
+                <span class="flow-copy">Coze Agent 解析意图，调用地图与天气能力</span>
+              </div>
+              <div class="flow-step">
+                <span class="flow-index">03</span>
+                <span class="flow-copy">Webhook 推送 FastAPI 云端服务，统一存储任务</span>
+              </div>
+              <div class="flow-step">
+                <span class="flow-index">04</span>
+                <span class="flow-copy">本地 listener 每 2 秒轮询，分发到同一 asyncio 事件循环</span>
+              </div>
+              <div class="flow-step">
+                <span class="flow-index">05</span>
+                <span class="flow-copy">MAVSDK + MAVLink v2 控制 PX4 飞控执行任务</span>
+              </div>
+              <div class="flow-step">
+                <span class="flow-index">06</span>
+                <span class="flow-copy">AirSim SDK 控制 UE4 虚拟飞机，Gazebo 与 UE4 并行验证</span>
+              </div>
+            </div>
+            <div class="tag-row">
+              <span class="tag blue">Python</span>
+              <span class="tag blue">FastAPI</span>
+              <span class="tag">MAVSDK</span>
+              <span class="tag">PX4</span>
+              <span class="tag">AirSim</span>
+              <span class="tag">Gazebo</span>
+            </div>
+          </article>
+          <aside class="project-side">
+            <div class="video-card" aria-label="项目演示视频">
+              <video src="demo.mp4" controls preload="metadata"></video>
+            </div>
+            <div class="status-card">
+              <h3>工程状态</h3>
+              <ul class="status-list">
+                <li><strong>已完成</strong><span>AI 指令解析、FastAPI 中转、本地轮询、MAVSDK 控制、双仿真演示。</span></li>
+                <li><strong>已验证</strong><span>PX4 自定义消息、ScheduledWorkItem 模块、Kconfig/CMake 注册与 pxh 控制台验证。</span></li>
+                <li><strong>待落地</strong><span>DJI Cloud API 或真机 SDK 接入、任务安全策略、飞行日志与巡检报告闭环。</span></li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="scenarios" class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Real Scenarios</p>
+            <h2>这个项目真正想落到这些业务里。</h2>
+          </div>
+          <p class="section-copy">
+            我的判断是：企业最先需要的不是“AI 自己决定怎么飞”，而是把重复、固定、标准化的无人机任务自动化。AI 负责理解任务和调度流程，飞控、地面站或机巢平台负责安全执行。
+          </p>
+        </div>
+
+        <div class="role-table" style="margin-bottom:14px;">
+          <div class="role-row">
+            <div class="role-label">现场痛点</div>
+            <div class="role-copy">客户每次巡检都要依赖专业飞手，临时沟通、航线确认、天气判断、飞后整理都很碎，导致高频巡检很难规模化。</div>
+          </div>
+          <div class="role-row">
+            <div class="role-label">我的思路</div>
+            <div class="role-copy">让用户用自然语言描述任务，系统自动解析地点、目标、时间和安全条件，再把任务交给 QGC、PX4 仿真或未来的 DJI Dock / Cloud API 执行。</div>
+          </div>
+          <div class="role-row">
+            <div class="role-label">落地边界</div>
+            <div class="role-copy">AI 不直接绕过安全规则控制飞机；真正落地时需要加入禁飞区、天气阈值、电量、返航策略、人工确认和飞行日志留存。</div>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>园区 / 厂区日常巡逻</h3>
+            <p>固定航线、固定频次、固定检查点最适合自动化。比如园区边界巡查、仓库周边巡查、夜间安防巡逻，飞完自动留下任务记录和异常截图。</p>
+            <div class="tag-row">
+              <span class="tag green">高频重复</span>
+              <span class="tag">安防巡逻</span>
+              <span class="tag">任务留痕</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>光伏 / 电力 / 水利巡检</h3>
+            <p>把“去某片区域巡检”拆成位置解析、航线生成、天气判断和飞后报告。后续可以接入图像识别，用于热斑、破损、异物、水位或通道异常初筛。</p>
+            <div class="tag-row">
+              <span class="tag blue">行业巡检</span>
+              <span class="tag">图像采集</span>
+              <span class="tag">报告闭环</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>工地 / 园区进度巡查</h3>
+            <p>按周或按天对同一区域执行固定任务，采集俯视影像和关键点位照片，用于施工进度、堆料变化、围挡安全和现场管理记录。</p>
+            <div class="tag-row">
+              <span class="tag amber">固定航线</span>
+              <span class="tag">进度对比</span>
+              <span class="tag">现场管理</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>机巢无人值守调度</h3>
+            <p>如果接入 DJI Dock / Cloud API，现有 FastAPI 调度层可以变成机巢任务中枢：接收任务、检查条件、下发航线、接收设备状态和执行结果。</p>
+            <div class="tag-row">
+              <span class="tag blue">DJI Dock</span>
+              <span class="tag">Cloud API</span>
+              <span class="tag">无人值守</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>地面站 / QGC 辅助调度</h3>
+            <p>面向 QGC 岗位，可以把项目收敛成“中文任务到航线草案、任务状态显示、MAVLink 日志解析”的小工具，而不是一上来做完整平台。</p>
+            <div class="tag-row">
+              <span class="tag blue">QGC</span>
+              <span class="tag">MAVLink</span>
+              <span class="tag">任务状态</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>应急巡查辅助</h3>
+            <p>在消防、山林、河道或城市事件中，AI 可以帮助快速整理任务描述和点位信息，但最终执行仍要保留人工确认和安全接管。</p>
+            <div class="tag-row">
+              <span class="tag green">快速响应</span>
+              <span class="tag">人工确认</span>
+              <span class="tag">安全优先</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="roles" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Target Roles</p>
+            <h2>我想投的岗位，和我正在补的能力。</h2>
+          </div>
+          <p class="section-copy">
+            我希望把自己的边界讲清楚：我不是一上来就能独立做飞控算法的人，但我有外场经验，理解 MAVLink/PX4 的链路，也愿意把 QGC、Qt 和机巢平台接入继续补深。
+          </p>
+        </div>
+        <div class="role-table">
+          <div class="role-row">
+            <div class="role-label">我现在最适合</div>
+            <div class="role-copy">无人机系统集成工程师、无人机技术支持、地面站测试工程师、低空经济项目实施、AI 应用工程师-无人机方向。</div>
+          </div>
+          <div class="role-row">
+            <div class="role-label">我正在补强</div>
+            <div class="role-copy">QGC 二次开发、Qt/QML 地面站界面、DJI Cloud API / Dock 平台接入、飞行日志分析与巡检报告自动化。</div>
+          </div>
+          <div class="role-row">
+            <div class="role-label">暂时不硬冲</div>
+            <div class="role-copy">纯飞控算法研发、强 C++ 底层架构、视觉 SLAM/路径规划算法岗。这些方向需要更长周期的专项补齐。</div>
+          </div>
+        </div>
+        <div class="grid-3" style="margin-top:14px;">
+          <article class="card">
+            <h3>QGC / 地面站</h3>
+            <p>围绕 MAVLink、任务状态、航线编辑、日志查看做小型二开 Demo，把项目往地面站岗位靠得更近。</p>
+          </article>
+          <article class="card">
+            <h3>DJI Dock / Cloud API</h3>
+            <p>把现有云端调度系统改造成机巢任务平台 mock，模拟设备上报、航线下发和执行回传。</p>
+          </article>
+          <article class="card">
+            <h3>巡检 AI 闭环</h3>
+            <p>从“飞机飞起来”升级到“飞完输出报告”：图片采集、缺陷标注、任务归档、PDF 报告。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Background</p>
+            <h2>外场、设计表达和 AI 工程化，是我的组合优势。</h2>
+          </div>
+          <p class="section-copy">
+            我从环境艺术设计出身，后来进入无人机行业。这个路径让我既能理解现场和客户，也能把复杂技术讲成清楚的方案、流程和演示。
+          </p>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <div class="timeline-time">2025.08 - 2026.02</div>
+            <div class="timeline-body">
+              <h3>福华创新无人机有限公司 · 无人机技术员</h3>
+              <p>参与无人机技术售前、现场部署、客户培训与外场支持，接触大疆 M300/M210 等工业级无人机作业场景。</p>
+              <div class="tag-row">
+                <span class="tag green">外场交付</span>
+                <span class="tag">客户培训</span>
+                <span class="tag">技术方案</span>
+              </div>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <div class="timeline-time">个人项目</div>
+            <div class="timeline-body">
+              <h3>无人机 AI 调度系统 · 独立主导</h3>
+              <p>使用 Coze、FastAPI、MAVSDK、PX4、AirSim、Gazebo 打通 AI 调度到飞控仿真的完整链路，并完成 PX4 固件模块初步开发。</p>
+              <div class="tag-row">
+                <span class="tag blue">AI Agent</span>
+                <span class="tag blue">MAVLink</span>
+                <span class="tag">PX4 Module</span>
+              </div>
+            </div>
+          </article>
+          <article class="timeline-item">
+            <div class="timeline-time">本科</div>
+            <div class="timeline-body">
+              <h3>华南师范大学 · 环境艺术设计</h3>
+              <p>具备 Blender、C4D、Midjourney 等视觉表达能力，能把技术项目做成清楚的视频、页面和演示材料。</p>
+              <div class="tag-row">
+                <span class="tag amber">设计表达</span>
+                <span class="tag">3D 可视化</span>
+                <span class="tag">方案呈现</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section alt">
+      <div class="wrap">
+        <div class="contact-layout">
+          <section class="contact-card">
+            <p class="section-kicker" style="color:#7dd3fc;">Contact</p>
+            <h2>如果方向合适，我希望有机会聊聊。</h2>
+            <p>
+              我想找的是无人机、地面站、机巢平台、低空经济项目交付或 AI 应用相关岗位。如果你觉得我的经历能补上团队的一块拼图，可以直接加微信或发邮件。
+            </p>
+            <div class="contact-links">
+              <a class="contact-link" href="mailto:liuyize6699@gmail.com">
+                liuyize6699@gmail.com
+                <span>邮箱</span>
+              </a>
+              <button class="contact-link js-open-wechat" type="button">
+                扫码添加微信
+                <span>微信</span>
+              </button>
+              <a class="contact-link" href="mailto:2318104245@qq.com">
+                2318104245@qq.com
+                <span>备用邮箱</span>
+              </a>
+              <a class="contact-link" href="https://github.com/liuyize6699-bot" target="_blank" rel="noreferrer">
+                github.com/liuyize6699-bot
+                <span>GitHub</span>
+              </a>
+            </div>
+          </section>
+
+          <section class="assistant-card" aria-label="AI 问答">
+            <div class="assistant-head">
+              <h3>刘海的 AI 项目助手</h3>
+              <span class="assistant-state">Ready</span>
+            </div>
+            <div id="chatLog" class="chat-log">
+              <div class="msg">你好，我可以回答关于刘海项目、技术栈、岗位方向和无人机经验的问题。</div>
+            </div>
+            <form id="chatForm" class="chat-form">
+              <input id="chatInput" type="text" autocomplete="off" placeholder="输入你想了解的问题" />
+              <button type="submit">发送</button>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2026 刘海 · 无人机系统集成与 AI 应用</span>
+      <span>低空经济 / 地面站 / 仿真测试 / AI 调度</span>
+    </div>
+  </footer>
+
+  <div id="wechatModal" class="wechat-modal" hidden role="dialog" aria-modal="true" aria-labelledby="wechatTitle">
+    <div class="wechat-dialog">
+      <div class="wechat-dialog-head">
+        <h3 id="wechatTitle">添加刘海微信</h3>
+        <button class="wechat-close js-close-wechat" type="button" aria-label="关闭微信二维码弹窗">×</button>
+      </div>
+      <div class="wechat-dialog-body">
+        <img class="wechat-qr" src="assets/wechat-qr.png" alt="刘海微信二维码" />
+        <p class="wechat-note">微信扫码添加，备注来意会更方便对接。</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.querySelector("#chatForm");
+    const input = document.querySelector("#chatInput");
+    const log = document.querySelector("#chatLog");
+    const wechatModal = document.querySelector("#wechatModal");
+    const wechatOpenButtons = document.querySelectorAll(".js-open-wechat");
+    const wechatCloseButton = document.querySelector(".js-close-wechat");
+    let conversationId = localStorage.getItem("lh_conversation_id") || "";
+
+    function openWechatModal() {
+      wechatModal.hidden = false;
+      wechatCloseButton.focus();
+    }
+
+    function closeWechatModal() {
+      wechatModal.hidden = true;
+    }
+
+    wechatOpenButtons.forEach((button) => {
+      button.addEventListener("click", openWechatModal);
+    });
+
+    wechatCloseButton.addEventListener("click", closeWechatModal);
+    wechatModal.addEventListener("click", (event) => {
+      if (event.target === wechatModal) closeWechatModal();
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !wechatModal.hidden) closeWechatModal();
+    });
+
+    function addMessage(text, type = "assistant") {
+      const node = document.createElement("div");
+      node.className = `msg ${type === "user" ? "user" : ""}`;
+      node.textContent = text;
+      log.appendChild(node);
+      log.scrollTop = log.scrollHeight;
+      return node;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const message = input.value.trim();
+      if (!message) return;
+
+      input.value = "";
+      addMessage(message, "user");
+      const pending = addMessage("正在思考...");
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message,
+            conversation_id: conversationId,
+            user_id: "liuhai-site-visitor"
+          })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "请求失败");
+        conversationId = data.conversation_id || conversationId;
+        if (conversationId) localStorage.setItem("lh_conversation_id", conversationId);
+        pending.textContent = data.answer || "暂时没有拿到回答。";
+      } catch (error) {
+        pending.textContent = "AI 助手暂时不可用，请直接通过邮箱或 GitHub 联系。";
+      }
+    });
+  </script>
+</body>
+</html>
