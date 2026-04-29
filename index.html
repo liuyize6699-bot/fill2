@@ -1511,12 +1511,15 @@
           })
         });
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || "请求失败");
+        if (!response.ok) {
+          const detail = typeof data.detail === "string" ? data.detail : "";
+          throw new Error([data.error, detail].filter(Boolean).join("：") || "请求失败");
+        }
         conversationId = data.conversation_id || conversationId;
         if (conversationId) localStorage.setItem("lh_conversation_id", conversationId);
         pending.textContent = data.answer || "暂时没有拿到回答。";
       } catch (error) {
-        pending.textContent = "AI 助手暂时不可用，请直接通过邮箱或 GitHub 联系。";
+        pending.textContent = `AI 助手连接失败：${error.message}`;
       }
     });
   </script>
