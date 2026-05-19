@@ -689,6 +689,11 @@
       overflow: hidden;
     }
 
+    .assistant-entry {
+      display: flex;
+      flex-direction: column;
+    }
+
     .assistant-head {
       padding: 18px 20px;
       display: flex;
@@ -701,6 +706,88 @@
     .assistant-head h3 {
       margin: 0;
       font-size: 17px;
+    }
+
+    .assistant-entry-body {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .assistant-entry-photo {
+      width: 112px;
+      aspect-ratio: 4 / 5;
+      display: block;
+      object-fit: cover;
+      object-position: 50% 36%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+    }
+
+    .assistant-entry-copy {
+      min-width: 0;
+    }
+
+    .assistant-entry-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .assistant-entry-points {
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+      color: #273142;
+      font-size: 14px;
+    }
+
+    .assistant-entry-points li {
+      padding-left: 13px;
+      position: relative;
+    }
+
+    .assistant-entry-points li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.72em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .assistant-entry-actions {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .assistant-entry-link {
+      min-height: 42px;
+      padding: 9px 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      color: #273142;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .assistant-entry-link.primary {
+      border-color: #101828;
+      background: #101828;
+      color: #ffffff;
     }
 
     .assistant-state {
@@ -1001,6 +1088,20 @@
         height: 300px;
       }
 
+      .assistant-entry-body {
+        grid-template-columns: 1fr;
+      }
+
+      .assistant-entry-photo {
+        width: 100%;
+        max-height: 260px;
+        aspect-ratio: 16 / 10;
+      }
+
+      .assistant-entry-link {
+        width: 100%;
+      }
+
       .footer-inner {
         align-items: flex-start;
         flex-direction: column;
@@ -1030,6 +1131,7 @@
         <a href="#scenarios">场景</a>
         <a href="#roles">岗位</a>
         <a href="#experience">经历</a>
+        <a href="avatar.html">AI 分身</a>
         <a href="#contact">联系</a>
       </div>
       <a class="nav-cta" href="https://github.com/liuyize6699-bot/wurenji-system" target="_blank" rel="noreferrer">GitHub 项目</a>
@@ -1050,6 +1152,7 @@
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#project">查看核心项目</a>
+            <a class="btn btn-ghost" href="avatar.html">和 AI 分身聊聊</a>
             <button class="btn btn-ghost js-open-wechat" type="button">联系我</button>
           </div>
         </div>
@@ -1413,18 +1516,28 @@
             </div>
           </section>
 
-          <section class="assistant-card" aria-label="AI 问答">
+          <section class="assistant-card assistant-entry" aria-label="刘海 AI 个人分身入口">
             <div class="assistant-head">
-              <h3>刘海的 AI 项目助手</h3>
+              <h3>刘海的 AI 个人分身</h3>
               <span class="assistant-state">Ready</span>
             </div>
-            <div id="chatLog" class="chat-log">
-              <div class="msg">你好，我可以回答关于刘海项目、技术栈、岗位方向和无人机经验的问题。</div>
+            <div class="assistant-entry-body">
+              <img class="assistant-entry-photo" src="assets/avatar-liuhai.jpg" alt="刘海个人头像" />
+              <div class="assistant-entry-copy">
+                <p>
+                  我把原来的 AI 问答拆成了独立页面。访客可以像和 AI 助手聊天一样，直接询问项目经历、技术栈、岗位方向和无人机外场经验。
+                </p>
+                <ul class="assistant-entry-points">
+                  <li>适合招聘方快速了解刘海的项目边界和匹配岗位。</li>
+                  <li>回答会基于网站资料，保持克制，不夸大项目状态。</li>
+                  <li>支持连续对话，打开页面即可开始提问。</li>
+                </ul>
+                <div class="assistant-entry-actions">
+                  <a class="assistant-entry-link primary" href="avatar.html">打开对话页</a>
+                  <a class="assistant-entry-link" href="mailto:liuyize6699@gmail.com">直接发邮件</a>
+                </div>
+              </div>
             </div>
-            <form id="chatForm" class="chat-form">
-              <input id="chatInput" type="text" autocomplete="off" placeholder="输入你想了解的问题" />
-              <button type="submit">发送</button>
-            </form>
           </section>
         </div>
       </div>
@@ -1491,37 +1604,39 @@
       return node;
     }
 
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const message = input.value.trim();
-      if (!message) return;
+    if (form && input && log) {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const message = input.value.trim();
+        if (!message) return;
 
-      input.value = "";
-      addMessage(message, "user");
-      const pending = addMessage("正在思考...");
+        input.value = "";
+        addMessage(message, "user");
+        const pending = addMessage("正在思考...");
 
-      try {
-        const response = await fetch("https://liuhai.vip/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message,
-            conversation_id: conversationId,
-            user_id: "liuhai-site-visitor"
-          })
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          const detail = typeof data.detail === "string" ? data.detail : "";
-          throw new Error([data.error, detail].filter(Boolean).join("：") || "请求失败");
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message,
+              conversation_id: conversationId,
+              user_id: "liuhai-site-visitor"
+            })
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            const detail = typeof data.detail === "string" ? data.detail : "";
+            throw new Error([data.error, detail].filter(Boolean).join("：") || "请求失败");
+          }
+          conversationId = data.conversation_id || conversationId;
+          if (conversationId) localStorage.setItem("lh_conversation_id", conversationId);
+          pending.textContent = data.answer || "暂时没有拿到回答。";
+        } catch (error) {
+          pending.textContent = `AI 助手连接失败：${error.message}`;
         }
-        conversationId = data.conversation_id || conversationId;
-        if (conversationId) localStorage.setItem("lh_conversation_id", conversationId);
-        pending.textContent = data.answer || "暂时没有拿到回答。";
-      } catch (error) {
-        pending.textContent = `AI 助手连接失败：${error.message}`;
-      }
-    });
+      });
+    }
   </script>
 </body>
 </html>

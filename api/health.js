@@ -3,9 +3,9 @@ export const config = { runtime: "edge" };
 export default async function handler() {
   return new Response(JSON.stringify({
     ok: true,
-    coze: {
-      has_token: Boolean(process.env.COZE_API_TOKEN),
-      has_bot_id: Boolean(process.env.COZE_BOT_ID)
+    minimax: {
+      has_api_key: Boolean(process.env.MINIMAX_API_KEY),
+      model: process.env.MINIMAX_MODEL || "MiniMax-M2.7"
     }
   }), {
     headers: {
