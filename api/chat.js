@@ -1,5 +1,7 @@
 export const config = { runtime: "nodejs" };
+export const maxDuration = 30;
 
+const API_VERSION = "minimax-text-v2-timeout-2026-05-19";
 const MINIMAX_API_URL = process.env.MINIMAX_API_URL || "https://api.minimax.io/v1/text/chatcompletion_v2";
 const MINIMAX_MODEL = process.env.MINIMAX_MODEL || "MiniMax-M2.7";
 const MINIMAX_TIMEOUT_MS = 25000;
@@ -204,6 +206,17 @@ async function minimaxChat(token, messages) {
 export default async function handler(req) {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  if (req.method === "GET") {
+    return json({
+      ok: true,
+      provider: "minimax",
+      version: API_VERSION,
+      endpoint: MINIMAX_API_URL,
+      model: MINIMAX_MODEL,
+      has_api_key: Boolean(process.env.MINIMAX_API_KEY)
+    });
   }
 
   if (req.method !== "POST") {
