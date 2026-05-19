@@ -81,18 +81,29 @@ const avatarSystemPrompt = `
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type"
 };
 
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      ...corsHeaders
-    }
+function sendJson(res, data, status = 200) {
+  Object.entries({
+    "Content-Type": "application/json; charset=utf-8",
+    ...corsHeaders
+  }).forEach(([key, value]) => {
+    res.setHeader(key, value);
   });
+  return res.status(status).json(data);
+}
+
+async function readJsonBody(req) {
+  if (req.body && typeof req.body === "object") return req.body;
+  if (typeof req.body === "string") return JSON.parse(req.body || "{}");
+
+  let raw = "";
+  for await (const chunk of req) {
+    raw += chunk;
+  }
+  return raw ? JSON.parse(raw) : {};
 }
 
 function safeConversationId(value) {
@@ -203,13 +214,17 @@ async function minimaxChat(token, messages) {
   return data;
 }
 
-export default async function handler(req) {
+export default async function handler(req, res) {
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    res.setHeader(key, value);
+  });
+
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return res.status(204).end();
   }
 
   if (req.method === "GET") {
-    return json({
+    return sendJson(res, {
       ok: true,
       provider: "minimax",
       version: API_VERSION,
@@ -220,13 +235,13 @@ export default async function handler(req) {
   }
 
   if (req.method !== "POST") {
-    return json({ error: "Only POST requests are supported." }, 405);
+    return sendJson(res, { error: "Only POST requests are supported." }, 405);
   }
 
   const token = process.env.MINIMAX_API_KEY;
 
   if (!token) {
-    return json({
+    return sendJson(res, {
       error: "MiniMax is not configured.",
       detail: {
         has_minimax_api_key: Boolean(token)
@@ -236,14 +251,14 @@ export default async function handler(req) {
 
   let body;
   try {
-    body = await req.json();
+    body = await readJsonBody(req);
   } catch {
-    return json({ error: "Invalid JSON body." }, 400);
+    return sendJson(res, { error: "Invalid JSON body." }, 400);
   }
 
   const message = String(body?.message || "").trim();
   if (!message) {
-    return json({ error: "Message is required." }, 400);
+    return sendJson(res, { error: "Message is required." }, 400);
   }
 
   try {
@@ -253,19 +268,19 @@ export default async function handler(req) {
     const answer = pickAnswer(chatData);
 
     if (!answer) {
-      return json({
+      return sendJson(res, {
         error: "MiniMax completed but no answer message was found.",
         detail: chatData
       }, 504);
     }
 
-    return json({
+    return sendJson(res, {
       answer,
       conversation_id: conversationId,
       provider: "minimax"
     });
   } catch (error) {
-    return json({
+    return sendJson(res, {
       error: "MiniMax request failed.",
       detail: error.message
     }, 500);
