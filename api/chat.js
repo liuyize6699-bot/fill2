@@ -1,7 +1,8 @@
 export const config = { runtime: "nodejs" };
 
-const MINIMAX_API_URL = process.env.MINIMAX_API_URL || "https://api.minimax.io/v1/chat/completions";
+const MINIMAX_API_URL = process.env.MINIMAX_API_URL || "https://api.minimax.io/v1/text/chatcompletion_v2";
 const MINIMAX_MODEL = process.env.MINIMAX_MODEL || "MiniMax-M2.7";
+const MINIMAX_TIMEOUT_MS = 25000;
 const MAX_HISTORY_MESSAGES = 10;
 const MAX_HISTORY_CONTENT_LENGTH = 2000;
 
@@ -112,7 +113,11 @@ function normalizeHistory(value) {
       const role = item?.role === "assistant" ? "assistant" : item?.role === "user" ? "user" : "";
       const content = String(item?.content || "").trim().slice(0, MAX_HISTORY_CONTENT_LENGTH);
       if (!role || !content) return null;
-      return { role, content };
+      return {
+        role,
+        name: role === "assistant" ? "liuhai_avatar" : "visitor",
+        content
+      };
     })
     .filter(Boolean);
 }
@@ -121,19 +126,21 @@ function buildMessages(message, history) {
   return [
     {
       role: "system",
+      name: "liuhai_avatar",
       content: avatarSystemPrompt
     },
     ...normalizeHistory(history),
     {
       role: "user",
+      name: "visitor",
       content: message
     }
   ];
 }
 
 function getMaxCompletionTokens() {
-  const value = Number(process.env.MINIMAX_MAX_COMPLETION_TOKENS || 700);
-  if (!Number.isFinite(value) || value < 1) return 700;
+  const value = Number(process.env.MINIMAX_MAX_COMPLETION_TOKENS || 450);
+  if (!Number.isFinite(value) || value < 1) return 450;
   return Math.min(Math.floor(value), 2048);
 }
 
@@ -150,19 +157,31 @@ function pickAnswer(data) {
 }
 
 async function minimaxChat(token, messages) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), MINIMAX_TIMEOUT_MS);
+
   const response = await fetch(MINIMAX_API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
+    signal: controller.signal,
     body: JSON.stringify({
       model: MINIMAX_MODEL,
       messages,
       stream: false,
-      temperature: 0.6,
+      temperature: 0.8,
+      top_p: 0.95,
       max_completion_tokens: getMaxCompletionTokens()
     })
+  }).catch((error) => {
+    if (error.name === "AbortError") {
+      throw new Error("MiniMax API timed out. Please try again with a shorter question.");
+    }
+    throw error;
+  }).finally(() => {
+    clearTimeout(timeout);
   });
 
   const text = await response.text();
